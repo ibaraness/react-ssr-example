@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 
 module.exports = {
@@ -62,6 +63,10 @@ module.exports = {
     },
     plugins: [
         /**
+         * Clean dist directory befor new build
+         */
+        new CleanWebpackPlugin(['dist']),
+        /**
          * Correctly inject complied budle JS files to HTML
          */
         new HtmlWebpackPlugin({
@@ -72,9 +77,11 @@ module.exports = {
          * An addon for HtmlWebpackPlugin that allows us to add styles and Scripts dynamically on the page
          */
         // new HtmlWebpackIncludeAssetsPlugin({
-        //     assets: ['./src/assets/style/style.css'],
+        //     assets: ['./src/style.css'],
         //     append: true
-        // })
+        // }),
+        new webpack.NamedModulesPlugin(),
+        new webpack.HotModuleReplacementPlugin()
     ],
     /**
      * Instructs webpack to generate source-maps
@@ -84,6 +91,7 @@ module.exports = {
      * Required when using webpack-dev-server with angular routing
      */
     devServer: {
-        historyApiFallback: true
+        historyApiFallback: true,
+        hot: true
     }
 };
